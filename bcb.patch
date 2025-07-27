@@ -1,0 +1,646 @@
+diff --git a/bcb.patch b/bcb.patch
+new file mode 100644
+index 0000000..b0448d2
+--- /dev/null
++++ b/bcb.patch
+@@ -0,0 +1,86 @@
++diff --git a/bcb.patch b/bcb.patch
++index ac4f343..e69de29 100644
++--- a/bcb.patch
+++++ b/bcb.patch
++@@ -1,81 +0,0 @@
++-diff --git a/patches/react-native-click-outside@0.1.1.patch.bak b/patches/react-native-click-outside@0.1.1.patch.bak
++-deleted file mode 100644
++-index 716c210..0000000
++---- a/patches/react-native-click-outside@0.1.1.patch.bak
++-+++ /dev/null
++-@@ -1,75 +0,0 @@
++--# Fix Rolldown
++--
++--diff --git a/node_modules/react-native-click-outside/.bun-tag-10ea960e763d9ac7 b/.bun-tag-10ea960e763d9ac7
++--new file mode 100644
++--index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
++--diff --git a/package.json b/package.json
++--index 68a186a5974f324201aab5fcaa8653000771e1f6..5508586335b885029abbf821da7067ae68a98889 100644
++----- a/package.json
++--+++ b/package.json
++--@@ -7,6 +7,11 @@
++--   "types": "lib/typescript/index.d.ts",
++--   "react-native": "src/index",
++--   "source": "src/index",
++--+  "exports": {
++--+    ".": {
++--+      "default": "./src/index.tsx"
++--+    }
++--+  },
++--   "files": [
++--     "src",
++--     "lib",
++--
++--# Fix TypeScript errors
++--
++--diff --git a/src/Provider.tsx b/src/Provider.tsx
++--index f2c4067a074532a74e398a0e287633c22d8a972c..711d1a77777139f6a3fac72fde5c9ac3a051fcab 100644
++----- a/src/Provider.tsx
++--+++ b/src/Provider.tsx
++--@@ -1,7 +1,7 @@
++---import React, { FC } from 'react';
++---import { GestureResponderEvent, Platform, StyleSheet, View } from 'react-native';
++---import { onTouch, setIsTouch } from './utils/collection';
++---import { isInRange } from './utils/helpers';
++--+import React, { type FC } from 'react'
++--+import { type GestureResponderEvent, Platform, StyleSheet, View } from 'react-native'
++--+import { onTouch, setIsTouch } from './utils/collection'
++--+import { isInRange } from './utils/helpers'
++-- 
++-- type ClickOutsideProviderProps = {
++--   activateOnSwipe?: boolean;
++--diff --git a/src/useClickOutside.ts b/src/useClickOutside.ts
++--index 211344ee83097ff11dfca09ae13c04cbe7e47791..9f5d6d561886aaa37e91735de372de8cdc3ec005 100644
++----- a/src/useClickOutside.ts
++--+++ b/src/useClickOutside.ts
++--@@ -1,7 +1,7 @@
++---import React from 'react';
++---import type { View } from 'react-native';
++---import { register, unregister } from './utils/collection';
++---import { useFocusEffect } from './useFocusEffect';
++--+import React, { type RefObject } from 'react'
++--+import type { View } from 'react-native'
++--+import { register, unregister } from './utils/collection'
++--+import { useFocusEffect } from './useFocusEffect'
++-- 
++-- type HookConfig = {
++--   triggerOnUnmount?: boolean;
++--@@ -35,5 +35,5 @@ export const useClickOutside = <T = View>(callback: () => void, config?: HookCon
++--     };
++--   }, [config?.triggerOnUnmount]);
++-- 
++---  return ref;
++--+  return ref as RefObject<T>;
++-- };
++--diff --git a/src/useFocusEffect.ts b/src/useFocusEffect.ts
++--index d41fdb32f61049fd6e9823179d44b70ff68948a5..83b2c22f92a82951070d2558bab4210487e93476 100644
++----- a/src/useFocusEffect.ts
++--+++ b/src/useFocusEffect.ts
++--@@ -1,5 +1,5 @@
++---import { useCallback, useEffect, useRef } from 'react';
++---import { AppState, AppStateStatus } from 'react-native';
++--+import { useCallback, useEffect, useRef } from 'react'
++--+import { AppState, type AppStateStatus } from 'react-native'
++-- 
++-- export const useFocusEffect = (activeCallback: () => void, inactiveCallback: () => void) => {
++--   const appState = useRef(AppState.currentState);
+diff --git a/bun.lock b/bun.lock
+index 4515a76..3f917d1 100644
+--- a/bun.lock
++++ b/bun.lock
+@@ -83,23 +83,25 @@
+   "packages": {
+     "@babel/code-frame": ["@babel/code-frame@7.27.1", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.27.1", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg=="],
+ 
+-    "@babel/generator": ["@babel/generator@7.27.5", "", { "dependencies": { "@babel/parser": "^7.27.5", "@babel/types": "^7.27.3", "@jridgewell/gen-mapping": "^0.3.5", "@jridgewell/trace-mapping": "^0.3.25", "jsesc": "^3.0.2" } }, "sha512-ZGhA37l0e/g2s1Cnzdix0O3aLYm66eF8aufiVteOgnwxgnRP8GoyMj7VWsgWnQbVKXyge7hqrFh2K2TQM6t1Hw=="],
++    "@babel/generator": ["@babel/generator@7.28.0", "", { "dependencies": { "@babel/parser": "^7.28.0", "@babel/types": "^7.28.0", "@jridgewell/gen-mapping": "^0.3.12", "@jridgewell/trace-mapping": "^0.3.28", "jsesc": "^3.0.2" } }, "sha512-lJjzvrbEeWrhB4P3QBsH7tey117PjLZnDbLiQEKjQ/fNJTjuq4HSqgFA+UNSwZT8D7dxxbnuSBMsa1lrWzKlQg=="],
++
++    "@babel/helper-globals": ["@babel/helper-globals@7.28.0", "", {}, "sha512-+W6cISkXFa1jXsDEdYA8HeevQT/FULhxzR99pxphltZcVaugps53THCeiWA8SguxxpSp3gKPiuYfSWopkLQ4hw=="],
+ 
+     "@babel/helper-string-parser": ["@babel/helper-string-parser@7.27.1", "", {}, "sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA=="],
+ 
+     "@babel/helper-validator-identifier": ["@babel/helper-validator-identifier@7.27.1", "", {}, "sha512-D2hP9eA+Sqx1kBZgzxZh0y1trbuU+JoDkiEwqhQ36nodYqJwyEIhPSdMNd7lOm/4io72luTPWH20Yda0xOuUow=="],
+ 
+-    "@babel/parser": ["@babel/parser@7.27.5", "", { "dependencies": { "@babel/types": "^7.27.3" }, "bin": "./bin/babel-parser.js" }, "sha512-OsQd175SxWkGlzbny8J3K8TnnDD0N3lrIUtB92xwyRpzaenGZhxDvxN/JgU00U3CDZNj9tPuDJ5H0WS4Nt3vKg=="],
++    "@babel/parser": ["@babel/parser@7.28.0", "", { "dependencies": { "@babel/types": "^7.28.0" }, "bin": "./bin/babel-parser.js" }, "sha512-jVZGvOxOuNSsuQuLRTh13nU0AogFlw32w/MT+LV6D3sP5WdbW61E77RnkbaO2dUvmPAYrBDJXGn5gGS6tH4j8g=="],
+ 
+-    "@babel/runtime": ["@babel/runtime@7.27.6", "", {}, "sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q=="],
++    "@babel/runtime": ["@babel/runtime@7.28.2", "", {}, "sha512-KHp2IflsnGywDjBWDkR9iEqiWSpc8GIi0lgTT3mOElT0PP1tG26P4tmFI2YvAdzgq9RGyoHZQEIEdZy6Ec5xCA=="],
+ 
+     "@babel/template": ["@babel/template@7.27.2", "", { "dependencies": { "@babel/code-frame": "^7.27.1", "@babel/parser": "^7.27.2", "@babel/types": "^7.27.1" } }, "sha512-LPDZ85aEJyYSd18/DkjNh4/y1ntkE5KwUHWTiqgRxruuZL2F1yuHligVHLvcHY2vMHXttKFpJn6LwfI7cw7ODw=="],
+ 
+-    "@babel/traverse": ["@babel/traverse@7.27.4", "", { "dependencies": { "@babel/code-frame": "^7.27.1", "@babel/generator": "^7.27.3", "@babel/parser": "^7.27.4", "@babel/template": "^7.27.2", "@babel/types": "^7.27.3", "debug": "^4.3.1", "globals": "^11.1.0" } }, "sha512-oNcu2QbHqts9BtOWJosOVJapWjBDSxGCpFvikNR5TGDYDQf3JwpIoMzIKrvfoti93cLfPJEG4tH9SPVeyCGgdA=="],
++    "@babel/traverse": ["@babel/traverse@7.28.0", "", { "dependencies": { "@babel/code-frame": "^7.27.1", "@babel/generator": "^7.28.0", "@babel/helper-globals": "^7.28.0", "@babel/parser": "^7.28.0", "@babel/template": "^7.27.2", "@babel/types": "^7.28.0", "debug": "^4.3.1" } }, "sha512-mGe7UK5wWyh0bKRfupsUchrQGqvDbZDbKJw+kcRGSmdHVYrv+ltd0pnpDTVpiTqnaBru9iEvA8pz8W46v0Amwg=="],
+ 
+-    "@babel/traverse--for-generate-function-map": ["@babel/traverse@7.27.4", "", { "dependencies": { "@babel/code-frame": "^7.27.1", "@babel/generator": "^7.27.3", "@babel/parser": "^7.27.4", "@babel/template": "^7.27.2", "@babel/types": "^7.27.3", "debug": "^4.3.1", "globals": "^11.1.0" } }, "sha512-oNcu2QbHqts9BtOWJosOVJapWjBDSxGCpFvikNR5TGDYDQf3JwpIoMzIKrvfoti93cLfPJEG4tH9SPVeyCGgdA=="],
++    "@babel/traverse--for-generate-function-map": ["@babel/traverse@7.28.0", "", { "dependencies": { "@babel/code-frame": "^7.27.1", "@babel/generator": "^7.28.0", "@babel/helper-globals": "^7.28.0", "@babel/parser": "^7.28.0", "@babel/template": "^7.27.2", "@babel/types": "^7.28.0", "debug": "^4.3.1" } }, "sha512-mGe7UK5wWyh0bKRfupsUchrQGqvDbZDbKJw+kcRGSmdHVYrv+ltd0pnpDTVpiTqnaBru9iEvA8pz8W46v0Amwg=="],
+ 
+-    "@babel/types": ["@babel/types@7.27.6", "", { "dependencies": { "@babel/helper-string-parser": "^7.27.1", "@babel/helper-validator-identifier": "^7.27.1" } }, "sha512-ETyHEk2VHHvl9b9jZP5IHPavHYk57EhanlRRuae9XCpb/j5bDCbPPMOBfCWhnl/7EDJz0jEMCi/RhccCE8r1+Q=="],
++    "@babel/types": ["@babel/types@7.28.2", "", { "dependencies": { "@babel/helper-string-parser": "^7.27.1", "@babel/helper-validator-identifier": "^7.27.1" } }, "sha512-ruv7Ae4J5dUYULmeXw1gmb7rYRz57OWCPM57pHojnLq/3Z1CK2lNSLTCVjxVk1F/TZHwOZZrOWi0ur95BbLxNQ=="],
+ 
+     "@biomejs/biome": ["@biomejs/biome@2.1.2", "", { "optionalDependencies": { "@biomejs/cli-darwin-arm64": "2.1.2", "@biomejs/cli-darwin-x64": "2.1.2", "@biomejs/cli-linux-arm64": "2.1.2", "@biomejs/cli-linux-arm64-musl": "2.1.2", "@biomejs/cli-linux-x64": "2.1.2", "@biomejs/cli-linux-x64-musl": "2.1.2", "@biomejs/cli-win32-arm64": "2.1.2", "@biomejs/cli-win32-x64": "2.1.2" }, "bin": { "biome": "bin/biome" } }, "sha512-yq8ZZuKuBVDgAS76LWCfFKHSYIAgqkxVB3mGVVpOe2vSkUTs7xG46zXZeNPRNVjiJuw0SZ3+J2rXiYx0RUpfGg=="],
+ 
+@@ -135,15 +137,13 @@
+ 
+     "@jest/types": ["@jest/types@29.6.3", "", { "dependencies": { "@jest/schemas": "^29.6.3", "@types/istanbul-lib-coverage": "^2.0.0", "@types/istanbul-reports": "^3.0.0", "@types/node": "*", "@types/yargs": "^17.0.8", "chalk": "^4.0.0" } }, "sha512-u3UPsIilWKOM3F9CXtrG8LEJmNxwoCQC/XVj4IKYXvvpx7QIi/Kg1LI5uDmDpKlac62NUtX7eLjRh+jVZcLOzw=="],
+ 
+-    "@jridgewell/gen-mapping": ["@jridgewell/gen-mapping@0.3.8", "", { "dependencies": { "@jridgewell/set-array": "^1.2.1", "@jridgewell/sourcemap-codec": "^1.4.10", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-imAbBGkb+ebQyxKgzv5Hu2nmROxoDOXHh80evxdoXNOrvAnVx7zimzc1Oo5h9RlfV4vPXaE2iM5pOFbvOCClWA=="],
++    "@jridgewell/gen-mapping": ["@jridgewell/gen-mapping@0.3.12", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.0", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-OuLGC46TjB5BbN1dH8JULVVZY4WTdkF7tV9Ys6wLL1rubZnCMstOhNHueU5bLCrnRuDhKPDM4g6sw4Bel5Gzqg=="],
+ 
+     "@jridgewell/resolve-uri": ["@jridgewell/resolve-uri@3.1.2", "", {}, "sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw=="],
+ 
+-    "@jridgewell/set-array": ["@jridgewell/set-array@1.2.1", "", {}, "sha512-R8gLRTZeyp03ymzP/6Lil/28tGeGEzhx1q2k703KGWRAI1VdvPIXdG70VJc2pAMw3NA6JKL5hhFu1sJX0Mnn/A=="],
+-
+-    "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.0", "", {}, "sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ=="],
++    "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.4", "", {}, "sha512-VT2+G1VQs/9oz078bLrYbecdZKs912zQlkelYpuf+SXF+QvZDYJlbx/LSx+meSAwdDFnF8FVXW92AVjjkVmgFw=="],
+ 
+-    "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.25", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ=="],
++    "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.29", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-uw6guiW/gcAGPDhLmd77/6lW8QLeiV5RUTsAX46Db6oLhGaVj4lhnPwb184s1bkc8kdVg/+h988dro8GRDpmYQ=="],
+ 
+     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.0.1", "", { "dependencies": { "@emnapi/core": "^1.4.5", "@emnapi/runtime": "^1.4.5", "@tybys/wasm-util": "^0.10.0" } }, "sha512-KVlQ/jgywZpixGCKMNwxStmmbYEMyokZpCf2YuIChhfJA2uqfAKNEM8INz7zzTo55iEXfBhIIs3VqYyqzDLj8g=="],
+ 
+@@ -195,15 +195,15 @@
+ 
+     "@react-native/virtualized-lists": ["@react-native/virtualized-lists@0.78.0", "", { "dependencies": { "invariant": "^2.2.4", "nullthrows": "^1.1.1" }, "peerDependencies": { "@types/react": "^19.0.0", "react": "*", "react-native": "*" }, "optionalPeers": ["@types/react"] }, "sha512-ibETs3AwpkkRcORRANvZeEFjzvN41W02X882sBzoxC5XdHiZ2DucXo4fjKF7i86MhYCFLfNSIYbwupx1D1iFmg=="],
+ 
+-    "@react-navigation/core": ["@react-navigation/core@7.10.1", "", { "dependencies": { "@react-navigation/routers": "^7.4.1", "escape-string-regexp": "^4.0.0", "nanoid": "^3.3.11", "query-string": "^7.1.3", "react-is": "^19.1.0", "use-latest-callback": "^0.2.4", "use-sync-external-store": "^1.5.0" }, "peerDependencies": { "react": ">= 18.2.0" } }, "sha512-6+bdalOqfDzc968s3Xz7VaUpPzMKzVay48dW+C/cd6sga01Iqjp4XAzQ7FNHdT7wgJYdvZaBOAlyvnok0OsFZw=="],
++    "@react-navigation/core": ["@react-navigation/core@7.12.3", "", { "dependencies": { "@react-navigation/routers": "^7.5.1", "escape-string-regexp": "^4.0.0", "nanoid": "^3.3.11", "query-string": "^7.1.3", "react-is": "^19.1.0", "use-latest-callback": "^0.2.4", "use-sync-external-store": "^1.5.0" }, "peerDependencies": { "react": ">= 18.2.0" } }, "sha512-oEz5sL8KTYmCv8SQX1A4k75A7VzYadOCudp/ewOBqRXOmZdxDQA9JuN7baE9IVyaRW0QTVDy+N/Wnqx9F4aW6A=="],
+ 
+-    "@react-navigation/elements": ["@react-navigation/elements@2.4.4", "", { "dependencies": { "color": "^4.2.3", "use-latest-callback": "^0.2.4" }, "peerDependencies": { "@react-native-masked-view/masked-view": ">= 0.2.0", "@react-navigation/native": "^7.1.11", "react": ">= 18.2.0", "react-native": "*", "react-native-safe-area-context": ">= 4.0.0" }, "optionalPeers": ["@react-native-masked-view/masked-view"] }, "sha512-6OAzrg6mn8s3qv6DZSFHxYRZv/3hUZTtkrq1XNBqLNlVIv89Iv7XKukYbZIxNoUss8r+RLJea0aNAOq5jbBkfw=="],
++    "@react-navigation/elements": ["@react-navigation/elements@2.6.1", "", { "dependencies": { "color": "^4.2.3", "use-latest-callback": "^0.2.4", "use-sync-external-store": "^1.5.0" }, "peerDependencies": { "@react-native-masked-view/masked-view": ">= 0.2.0", "@react-navigation/native": "^7.1.16", "react": ">= 18.2.0", "react-native": "*", "react-native-safe-area-context": ">= 4.0.0" }, "optionalPeers": ["@react-native-masked-view/masked-view"] }, "sha512-kVbIo+5FaqJv6MiYUR6nQHiw+10dmmH/P10C29wrH9S6fr7k69fImHGeiOI/h7SMDJ2vjWhftyEjqYO+c2LG/w=="],
+ 
+-    "@react-navigation/native": ["@react-navigation/native@7.1.11", "", { "dependencies": { "@react-navigation/core": "^7.10.1", "escape-string-regexp": "^4.0.0", "fast-deep-equal": "^3.1.3", "nanoid": "^3.3.11", "use-latest-callback": "^0.2.4" }, "peerDependencies": { "react": ">= 18.2.0", "react-native": "*" } }, "sha512-f/UETxy2Nahr8jko9mSSRBvIaDubGc3M2yx5pWxMPxZgLkB4TqPB0O1OFdbcAuRDwLgzXXK+Joh7nTdGug9v2A=="],
++    "@react-navigation/native": ["@react-navigation/native@7.1.16", "", { "dependencies": { "@react-navigation/core": "^7.12.3", "escape-string-regexp": "^4.0.0", "fast-deep-equal": "^3.1.3", "nanoid": "^3.3.11", "use-latest-callback": "^0.2.4" }, "peerDependencies": { "react": ">= 18.2.0", "react-native": "*" } }, "sha512-JnnK81JYJ6PiMsuBEshPGHwfagRnH8W7SYdWNrPxQdNtakkHtG4u0O9FmrOnKiPl45DaftCcH1g+OVTFFgWa0Q=="],
+ 
+-    "@react-navigation/routers": ["@react-navigation/routers@7.4.1", "", { "dependencies": { "nanoid": "^3.3.11" } }, "sha512-42mZrMzQ0LfKxUb5OHIurYrPYyRsXFLolucILrvm21f0O40Sw0Ufh1bnn/jRqnxZZu7wvpUGIGYM8nS9zVE1Aw=="],
++    "@react-navigation/routers": ["@react-navigation/routers@7.5.1", "", { "dependencies": { "nanoid": "^3.3.11" } }, "sha512-pxipMW/iEBSUrjxz2cDD7fNwkqR4xoi0E/PcfTQGCcdJwLoaxzab5kSadBLj1MTJyT0YRrOXL9umHpXtp+Dv4w=="],
+ 
+-    "@react-navigation/stack": ["@react-navigation/stack@7.3.4", "", { "dependencies": { "@react-navigation/elements": "^2.4.4", "color": "^4.2.3" }, "peerDependencies": { "@react-navigation/native": "^7.1.11", "react": ">= 18.2.0", "react-native": "*", "react-native-gesture-handler": ">= 2.0.0", "react-native-safe-area-context": ">= 4.0.0", "react-native-screens": ">= 4.0.0" } }, "sha512-ZLVeiKBpcrXxue7fC4M/X02uEPtmkcO1ySvlDFN/obNEH0PqHn7XxVcJMNEoLe8yoM8TytezDdaQcRdPtEZzUw=="],
++    "@react-navigation/stack": ["@react-navigation/stack@7.4.4", "", { "dependencies": { "@react-navigation/elements": "^2.6.1", "color": "^4.2.3" }, "peerDependencies": { "@react-navigation/native": "^7.1.16", "react": ">= 18.2.0", "react-native": "*", "react-native-gesture-handler": ">= 2.0.0", "react-native-safe-area-context": ">= 4.0.0", "react-native-screens": ">= 4.0.0" } }, "sha512-2TjeTRCjE6W8OgbZ3dt88FwESVqbZLOQkVijNdj0xSQ67awDwNmunyp5vsvNsIlXUNsc21w/iddr25euK0YwkA=="],
+ 
+     "@revenge-mod/assets": ["@revenge-mod/assets@workspace:lib/assets"],
+ 
+@@ -301,7 +301,7 @@
+ 
+     "@types/istanbul-reports": ["@types/istanbul-reports@3.0.4", "", { "dependencies": { "@types/istanbul-lib-report": "*" } }, "sha512-pk2B1NWalF9toCRu6gjBzR69syFjP4Od8WRAX+0mmf9lAjCRicLOWc+ZrxZHx/0XRjotgkF9t6iaMJ+aXcOdZQ=="],
+ 
+-    "@types/node": ["@types/node@24.0.3", "", { "dependencies": { "undici-types": "~7.8.0" } }, "sha512-R4I/kzCYAdRLzfiCabn9hxWfbuHS573x+r0dJMkkzThEa7pbrcDWK+9zu3e7aBOouf+rQAciqPFMnxwr0aWgKg=="],
++    "@types/node": ["@types/node@24.1.0", "", { "dependencies": { "undici-types": "~7.8.0" } }, "sha512-ut5FthK5moxFKH2T1CUOC6ctR67rQRvvHdFLCD2Ql6KXmMuCrjsSsRI9UsLCm9M18BMwClv4pn327UvB7eeO1w=="],
+ 
+     "@types/react": ["@types/react@19.1.8", "", { "dependencies": { "csstype": "^3.0.2" } }, "sha512-AwAfQ2Wa5bCx9WP8nZL2uMZWod7J7/JSplxbTmBQ5ms6QpqNYm672H0Vu9ZVKVngQ+ii4R/byguVEUZQyeg44g=="],
+ 
+@@ -389,8 +389,6 @@
+ 
+     "glob": ["glob@7.2.3", "", { "dependencies": { "fs.realpath": "^1.0.0", "inflight": "^1.0.4", "inherits": "2", "minimatch": "^3.1.1", "once": "^1.3.0", "path-is-absolute": "^1.0.0" } }, "sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q=="],
+ 
+-    "globals": ["globals@11.12.0", "", {}, "sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA=="],
+-
+     "graceful-fs": ["graceful-fs@4.2.11", "", {}, "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ=="],
+ 
+     "has-flag": ["has-flag@4.0.0", "", {}, "sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ=="],
+@@ -475,7 +473,7 @@
+ 
+     "react-native-gesture-handler": ["dry-uninstall@0.3.0", "", {}, "sha512-b8h94RVpETWkVV59x62NsY++79bM7Si6Dxq7a4iVxRcJU3ZJJ4vaiC7wUZwM8WDK0ySRL+i+T/1SMAzbJLejYA=="],
+ 
+-    "react-native-safe-area-context": ["react-native-safe-area-context@5.4.1", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-x+g3NblZ9jof8y+XkVvaGlpMrSlixhrJJ33BRzhTAKUKctQVecO1heSXmzxc5UdjvGYBKS6kPZVUw2b8NxHcPg=="],
++    "react-native-safe-area-context": ["react-native-safe-area-context@5.5.2", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-t4YVbHa9uAGf+pHMabGrb0uHrD5ogAusSu842oikJ3YKXcYp6iB4PTGl0EZNkUIR3pCnw/CXKn42OCfhsS0JIw=="],
+ 
+     "react-native-screens": ["dry-uninstall@0.3.0", "", {}, "sha512-b8h94RVpETWkVV59x62NsY++79bM7Si6Dxq7a4iVxRcJU3ZJJ4vaiC7wUZwM8WDK0ySRL+i+T/1SMAzbJLejYA=="],
+ 
+diff --git a/patches/react-native-click-outside@0.1.1.patch b/patches/react-native-click-outside@0.1.1.patch
+index 716c210..4abf3ee 100644
+--- a/patches/react-native-click-outside@0.1.1.patch
++++ b/patches/react-native-click-outside@0.1.1.patch
+@@ -1,75 +1,44 @@
+-# Fix Rolldown
+-
+-diff --git a/node_modules/react-native-click-outside/.bun-tag-10ea960e763d9ac7 b/.bun-tag-10ea960e763d9ac7
+-new file mode 100644
+-index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+-diff --git a/package.json b/package.json
+-index 68a186a5974f324201aab5fcaa8653000771e1f6..5508586335b885029abbf821da7067ae68a98889 100644
+---- a/package.json
+-+++ b/package.json
+-@@ -7,6 +7,11 @@
+-   "types": "lib/typescript/index.d.ts",
+-   "react-native": "src/index",
+-   "source": "src/index",
+-+  "exports": {
+-+    ".": {
+-+      "default": "./src/index.tsx"
+-+    }
+-+  },
+-   "files": [
+-     "src",
+-     "lib",
+-
+-# Fix TypeScript errors
+-
+ diff --git a/src/Provider.tsx b/src/Provider.tsx
+-index f2c4067a074532a74e398a0e287633c22d8a972c..711d1a77777139f6a3fac72fde5c9ac3a051fcab 100644
++index 711d1a77777139f6a3fac72fde5c9ac3a051fcab..436356c2d27ab324979f4239524f885a2202ddb8 100644
+ --- a/src/Provider.tsx
+ +++ b/src/Provider.tsx
+ @@ -1,7 +1,7 @@
+--import React, { FC } from 'react';
+--import { GestureResponderEvent, Platform, StyleSheet, View } from 'react-native';
+--import { onTouch, setIsTouch } from './utils/collection';
+--import { isInRange } from './utils/helpers';
+-+import React, { type FC } from 'react'
+-+import { type GestureResponderEvent, Platform, StyleSheet, View } from 'react-native'
+-+import { onTouch, setIsTouch } from './utils/collection'
+-+import { isInRange } from './utils/helpers'
++-import React, { type FC } from 'react'
++-import { type GestureResponderEvent, Platform, StyleSheet, View } from 'react-native'
++-import { onTouch, setIsTouch } from './utils/collection'
++-import { isInRange } from './utils/helpers'
+++import React, { type FC } from 'react';
+++import { type GestureResponderEvent, Platform, StyleSheet, View } from 'react-native';
+++import { onTouch, setIsTouch } from './utils/collection';
+++import { isInRange } from './utils/helpers';
+  
+  type ClickOutsideProviderProps = {
+    activateOnSwipe?: boolean;
+ diff --git a/src/useClickOutside.ts b/src/useClickOutside.ts
+-index 211344ee83097ff11dfca09ae13c04cbe7e47791..9f5d6d561886aaa37e91735de372de8cdc3ec005 100644
++index 9f5d6d561886aaa37e91735de372de8cdc3ec005..368af593f7661cedbabc4aebff34ba11fc76822b 100644
+ --- a/src/useClickOutside.ts
+ +++ b/src/useClickOutside.ts
+ @@ -1,7 +1,7 @@
+--import React from 'react';
+--import type { View } from 'react-native';
+--import { register, unregister } from './utils/collection';
+--import { useFocusEffect } from './useFocusEffect';
+-+import React, { type RefObject } from 'react'
+-+import type { View } from 'react-native'
+-+import { register, unregister } from './utils/collection'
+-+import { useFocusEffect } from './useFocusEffect'
++-import React, { type RefObject } from 'react'
++-import type { View } from 'react-native'
++-import { register, unregister } from './utils/collection'
++-import { useFocusEffect } from './useFocusEffect'
+++import React, { type RefObject } from 'react';
+++import type { View } from 'react-native';
+++import { register, unregister } from './utils/collection';
+++import { useFocusEffect } from './useFocusEffect';
+  
+  type HookConfig = {
+    triggerOnUnmount?: boolean;
+-@@ -35,5 +35,5 @@ export const useClickOutside = <T = View>(callback: () => void, config?: HookCon
+-     };
+-   }, [config?.triggerOnUnmount]);
+- 
+--  return ref;
+-+  return ref as RefObject<T>;
+- };
+ diff --git a/src/useFocusEffect.ts b/src/useFocusEffect.ts
+-index d41fdb32f61049fd6e9823179d44b70ff68948a5..83b2c22f92a82951070d2558bab4210487e93476 100644
++index 83b2c22f92a82951070d2558bab4210487e93476..5d450a43d4eb1a3928ecc93314179b94ad8f9177 100644
+ --- a/src/useFocusEffect.ts
+ +++ b/src/useFocusEffect.ts
+ @@ -1,5 +1,5 @@
+--import { useCallback, useEffect, useRef } from 'react';
+--import { AppState, AppStateStatus } from 'react-native';
+-+import { useCallback, useEffect, useRef } from 'react'
+-+import { AppState, type AppStateStatus } from 'react-native'
++-import { useCallback, useEffect, useRef } from 'react'
++-import { AppState, type AppStateStatus } from 'react-native'
+++import { useCallback, useEffect, useRef } from 'react';
+++import { AppState, type AppStateStatus } from 'react-native';
+  
+  export const useFocusEffect = (activeCallback: () => void, inactiveCallback: () => void) => {
+    const appState = useRef(AppState.currentState);
+diff --git a/src/plugins/start/better-chat-buttons/index.tsx b/src/plugins/start/better-chat-buttons/index.tsx
+new file mode 100644
+index 0000000..722a389
+--- /dev/null
++++ b/src/plugins/start/better-chat-buttons/index.tsx
+@@ -0,0 +1,205 @@
++import { createFilterGenerator } from '@revenge-mod/modules/finders/filters'
++import { getModule } from '@revenge-mod/modules/finders/get'
++import { lookupModule } from '@revenge-mod/modules/finders/lookup'
++import { after, before } from '@revenge-mod/patcher'
++import { registerPlugin } from '@revenge-mod/plugins/_'
++import { PluginFlags } from '@revenge-mod/plugins/constants'
++import { findInReactFiber } from '@revenge-mod/utils/react'
++import { SettingsComponent } from './settings'
++import type {
++    Filter,
++    FilterGenerator,
++} from '@revenge-mod/modules/finders/filters'
++import type {
++    ForwardRefRenderFunction,
++    MemoExoticComponent,
++    NamedExoticComponent,
++    RefObject,
++} from 'react'
++
++export interface Settings {
++    hide: {
++        app: boolean
++        thread: boolean
++        gift: boolean
++        voice: boolean
++    }
++    collapse: {
++        actions: boolean
++        send: boolean
++    }
++}
++
++registerPlugin<{ storage: Settings }>(
++    {
++        id: 'palmdevs.better-chat-buttons',
++        name: 'Better Chat Buttons',
++        description:
++            'Hiding all annoying chat buttons, or making them never collapse, all configurable.',
++        author: 'PalmDevs',
++        icon: 'ChatCheckIcon',
++    },
++    {
++        storage: {
++            load: true,
++            default: {
++                collapse: {
++                    actions: false,
++                    send: false,
++                },
++                hide: {
++                    gift: true,
++                    app: true,
++                    thread: true,
++                    voice: true,
++                },
++            },
++        },
++        async start({ cleanup, storage }) {
++            cleanup(
++                getModule(
++                    byMemoizedNamedExoticComponent<
++                        SendButtonRef,
++                        {
++                            hasPendingAttachments: boolean
++                            canSendVoiceMessage: boolean
++                        }
++                    >('ChatInputSendButton'),
++                    ChatInputSendButton => {
++                        const [ChatInputActions] = lookupModule(
++                            byMemoizedNamedExoticComponent<
++                                ActionsRef,
++                                {
++                                    canStartThreads: boolean
++                                    isAppLauncherEnabled: boolean
++                                    shouldShowGiftButton: boolean
++                                }
++                            >('ChatInputActions'),
++                        )
++
++                        let patchedOnDismissActions: ActionsRef['onDismissActions']
++
++                        cleanup(
++                            after(ChatInputSendButton.type, 'render', tree => {
++                                const node = findInReactFiber(
++                                    tree as Extract<typeof tree, object>,
++                                    (
++                                        tree,
++                                    ): tree is {
++                                        props: {
++                                            items: Array<{
++                                                isOnCooldown: boolean
++                                                sendEnabled: boolean
++                                                sendVoiceMessageEnabled: boolean
++                                            }>
++                                        }
++                                    } => Array.isArray(tree.props?.items),
++                                )
++
++                                if (!node) return tree
++
++                                const {
++                                    props: {
++                                        items: [item],
++                                    },
++                                } = node
++
++                                if (item.sendVoiceMessageEnabled)
++                                    item.sendVoiceMessageEnabled =
++                                        !settings.hide.voice
++
++                                if (settings.collapse.send) {
++                                    const { isOnCooldown, sendEnabled } = item
++                                    if (isOnCooldown || !sendEnabled)
++                                        return null
++                                }
++
++                                return tree
++                            }),
++
++                            before(ChatInputActions!.type, 'render', args => {
++                                const [props] = args
++
++                                if (props.isAppLauncherEnabled)
++                                    props.isAppLauncherEnabled =
++                                        !settings.hide.app
++                                if (props.canStartThreads)
++                                    props.canStartThreads =
++                                        !settings.hide.thread
++                                props.shouldShowGiftButton = !settings.hide.gift
++
++                                return args
++                            }),
++                            before(ChatInputActions!.type, 'render', args => {
++                                const ref = args[1] as
++                                    | RefObject<ActionsRef | null>
++                                    | undefined // When using DevTools, the ref is undefined
++
++                                if (ref) {
++                                    // Ref is only available after the first render
++                                    requestAnimationFrame(() => {
++                                        const { current } = ref
++                                        if (!current) return
++
++                                        const { onDismissActions } = current
++
++                                        if (
++                                            onDismissActions ===
++                                            patchedOnDismissActions
++                                        )
++                                            return
++
++                                        patchedOnDismissActions =
++                                            current.onDismissActions = () =>
++                                                (settings.collapse.actions
++                                                    ? onDismissActions
++                                                    : current.onShowActions
++                                                ).call(current)
++
++                                        cleanup(() => {
++                                            current.onDismissActions =
++                                                onDismissActions
++                                        })
++                                    })
++                                }
++
++                                return args
++                            }),
++                        )
++                    },
++                ),
++            )
++
++            const settings = await storage.get()
++        },
++        SettingsComponent,
++    },
++    PluginFlags.Enabled,
++    0,
++)
++
++interface ForwardRefExoticComponent<T, P = object>
++    extends NamedExoticComponent<P> {
++    render: ForwardRefRenderFunction<T, P>
++}
++
++type ByMemoizedNamedExoticComponent = FilterGenerator<
++    <T, P = object>(
++        name: string,
++    ) => Filter<MemoExoticComponent<ForwardRefExoticComponent<T, P>>, true>
++>
++
++const byMemoizedNamedExoticComponent = createFilterGenerator(
++    ([name], _, exports) =>
++        exports.type?.render?.length === 2 && exports.type.displayName === name,
++    ([name]) => `byMemoizedNamedExoticComponent(${name})`,
++) as ByMemoizedNamedExoticComponent
++
++interface ActionsRef {
++    onDismissActions(): void
++    onShowActions(): void
++}
++
++interface SendButtonRef {
++    setHasText(hasText: boolean): void
++}
+diff --git a/src/plugins/start/better-chat-buttons/settings.tsx b/src/plugins/start/better-chat-buttons/settings.tsx
+new file mode 100644
+index 0000000..8225062
+--- /dev/null
++++ b/src/plugins/start/better-chat-buttons/settings.tsx
+@@ -0,0 +1,131 @@
++import { getAssetIdByName } from '@revenge-mod/assets'
++import Page from '@revenge-mod/components/Page'
++import { Design } from '@revenge-mod/discord/design'
++import { ScrollView } from 'react-native'
++import type { PluginSettingsComponent } from '@revenge-mod/plugins/types'
++import type { ComponentProps } from 'react'
++import type { Settings } from '.'
++
++const {
++    Stack,
++    TableRadioGroup,
++    TableRadioRow,
++    TableRow,
++    TableRowGroup,
++    TableSwitchRow,
++    Text,
++} = Design
++
++type Props = ComponentProps<PluginSettingsComponent<{ storage: Settings }>>
++
++export function SettingsComponent({ api }: Props) {
++    return (
++        <Page>
++            <ScrollView>
++                <Stack spacing={24}>
++                    <Text
++                        color="text-danger"
++                        variant="text-md/semibold"
++                        style={{ textAlign: 'center' }}
++                    >
++                        ❗ Changes are only applied when you start typing again.
++                    </Text>
++                    <HideActionButtonsSetting api={api} />
++                    <ActionButtonsCollapseBehaviorSetting api={api} />
++                    <SendButtonCollapseBehaviorSetting api={api} />
++                </Stack>
++            </ScrollView>
++        </Page>
++    )
++}
++
++function HideActionButtonsSetting({ api }: Props) {
++    return (
++        <TableRowGroup title="Hide Action Buttons">
++            {(
++                [
++                    ['Apps & Commands', 'GameControllerIcon', 'app'],
++                    ['Gift', 'ic_gift', 'gift'],
++                    ['New Thread', 'ThreadPlusIcon', 'thread'],
++                    ['Voice Message', 'MicrophoneIcon', 'voice'],
++                ] as Array<
++                    [name: string, icon: string, key: keyof Settings['hide']]
++                >
++            ).map(([label, icon, key]) => {
++                const setting = api.storage.use(x => x.hide && key in x.hide)!
++
++                return (
++                    <TableSwitchRow
++                        key={key}
++                        icon={
++                            <TableRow.Icon source={getAssetIdByName(icon)!} />
++                        }
++                        label={`Hide ${label}`}
++                        value={setting.hide[key]}
++                        onValueChange={(v: boolean) => {
++                            api.storage.set({
++                                hide: {
++                                    [key]: v,
++                                },
++                            })
++                        }}
++                    />
++                )
++            })}
++        </TableRowGroup>
++    )
++}
++
++function ActionButtonsCollapseBehaviorSetting({ api }: Props) {
++    const {
++        collapse: { actions: setting },
++    } = api.storage.use(x => x.collapse && 'actions' in x.collapse)!
++
++    return (
++        <TableRadioGroup
++            title="Action Buttons Collapse Behavior"
++            defaultValue={setting}
++            onChange={v => {
++                api.storage.set({
++                    collapse: {
++                        actions: v,
++                    },
++                })
++            }}
++        >
++            <TableRadioRow label="Never collapse" value={false} />
++            <TableRadioRow
++                label="Collapse while typing"
++                subLabel="Collapse action buttons when you start typing."
++                value={true}
++            />
++        </TableRadioGroup>
++    )
++}
++
++function SendButtonCollapseBehaviorSetting({ api }: Props) {
++    const {
++        collapse: { send: setting },
++    } = api.storage.use(x => x.collapse && 'send' in x.collapse)!
++
++    return (
++        <TableRadioGroup
++            title="Send Button Collapse Behavior"
++            defaultValue={setting}
++            onChange={v => {
++                api.storage.set({
++                    collapse: {
++                        send: v,
++                    },
++                })
++            }}
++        >
++            <TableRadioRow label="Never collapse" value={false} />
++            <TableRadioRow
++                label="Collapse when no content"
++                subLabel="Collapse the Send button when you are not typing or attaching something."
++                value={true}
++            />
++        </TableRadioGroup>
++    )
++}

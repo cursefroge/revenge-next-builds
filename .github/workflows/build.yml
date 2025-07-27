@@ -1,58 +1,57 @@
-name: Upload latest Revenge Next build to GitHub Pages
+name: Build Patched Repository
 
 on:
-  # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-  # Runs every 3 days
+    branches: [ main ]
   schedule:
     - cron: '0 0 */3 * *'
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  workflow_dispatch:
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
+    
     steps:
+    - name: Checkout current repository
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: |
+          *.patch
+        sparse-checkout-cone-mode: false
+    
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+    
+    - name: Clone target repository
+      run: |
+        git clone https://github.com/revenge-mod/revenge-next-bundle.git revenge
+        cd revenge
+    
+    - name: Apply patches
+      run: |
+        cd revenge
+        git apply ../*.patch
+    
+    - name: Install dependencies
+      run: |
+        cd revenge
+        bun install
+    
+    - name: Build project
+      run: |
+        cd revenge
+        bun run build
 
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y jq
+    - name: Setup Pages
+      uses: actions/configure-pages@v5
 
-      - name: Fetch Revenge Next bundle
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          RUN_ID=$(gh run list -R revenge-mod/revenge-bundle-next --workflow build.yml --limit 1 --json databaseId | jq '.[0].databaseId')
-          ARTIFACT_ID=$(gh api -H "Accept: application/vnd.github+json" /repos/revenge-mod/revenge-bundle-next/actions/runs/$RUN_ID/artifacts | jq '.artifacts[0].id')
-          gh api -H "Accept: application/vnd.github+json" /repos/revenge-mod/revenge-bundle-next/actions/artifacts/$ARTIFACT_ID/zip > artifact.zip
-          unzip -j artifact.zip 'revenge.bundle' -d .
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: revenge/dist/revenge.bundle
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
