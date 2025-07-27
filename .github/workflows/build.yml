@@ -26,7 +26,7 @@ jobs:
     
     - name: Clone target repository
       run: |
-        git clone https://github.com/revenge-mod/revenge-next-bundle.git revenge
+        git clone https://github.com/revenge-mod/revenge-bundle-next.git revenge
         cd revenge
     
     - name: Apply patches
